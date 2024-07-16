@@ -9,13 +9,47 @@
 
 <body>
   <h1>Chat App</h1>
-  <button onclick="createConnection()">Create Web Connection</button>
+
+  <div id="messages">
+
+  </div>
+
+  <!-- #$# button used in [#ab1] -->
+  <!-- <button onclick="createConnection()">Create Web Connection</button> -->
+
+  <input type="text" placeholder="Enter message" id="messageInput">
+  <button id="sendBtn">Send</button>
 
   <script src="/socket.io/socket.io.js"></script>
   <script>
-    // both works same... mind it
+    // both works same... mind it 
     // var socket = io.connect('http://localhost:9000');
     var socket = io();
+
+    // #$# function used in [#ab1]
+    // function createConnection(){
+    //   var socket = io();
+    // }
+    const sendBtn = document.getElementById('sendBtn');
+    const messageInput = document.getElementById('messageInput');
+
+    const allMessages = document.getElementById('messages');
+
+    // #$# [ab3] getting message back from server'broadcast-message'
+    socket.on('broadcast-message', (message)=>{
+      console.log(message);
+      const singleMessage = document.createElement('p')
+      singleMessage.innerText = message;
+      allMessages.appendChild(singleMessage);
+    })
+
+    sendBtn.addEventListener('click', (e)=>{
+      const message = messageInput.value;
+      console.log(message);
+      // #$# [ab2] added a new emit to backend for the 'user-message'
+      socket.emit('user-message', message);
+
+    })
   </script>
 </body>
 

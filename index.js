@@ -12,8 +12,15 @@ const io = new Server(server)
 
 // socket io
 io.on('connection', (socket) => {
-  console.log("Connection detected");
-  console.log(`Socket ID: ${socket.id}`);
+  // #$# wrote initially to understand []
+  // console.log("Connection detected");
+  // console.log(`Socket ID: ${socket.id}`);
+
+  // #$# [ab2] added a new event listener to listen for the 'user-message' event
+  socket.on('user-message', (msg) => {
+    console.log(`Message received: ${msg}`);
+    io.emit('broadcast-message', msg); // #$# broadcast the message to all connected clients
+  });
 });
 
 app.use(express.static(path.resolve('./public')))
